@@ -107,6 +107,92 @@ module.exports = {
                 }
             })
         }
+    },
+    delete:(req,res,next)=>{
+
+        if(req.body.id){
+            console.log(req.body.firstName);
+            user.findOneAndUpdate({_id:req.body.id},{deleted:true},{upsert:true},(err,data)=>{
+                if(err){
+                    return next(new Error('error occured while deleting user'));
+                    //console.log(err);
+                }
+                else if(data){
+                    console.log(data);
+                    req.cdata={
+                        success:1,
+                        message: 'user deleted successfully'
+                        
+
+                    }
+                    next();
+                }
+            })
+        }
+        // user.find((err,data)=>{
+        //     if(err) return next(new Error('error deleting user'))
+        //         console.log(user);
+        //     if(data){
+        //         req.cdata={
+        //             success:1,
+        //             message:'user deleted successfully'
+        //         }
+        //         next();
+        //     }
+        // })
+    },
+    getUndeleted:(req,res,next)=>{
+        user.find({ deleted:false },(err,data)=>{
+            if(err) return next(new Error('error saving to database'))
+            //console.log(user);
+            if(data){
+                req.cdata = {
+                    success:1,
+                    message: 'user data retrieved',
+                    data:data
+                }
+            next();
+
+            }
+        })
+    },
+    getUserByName:(req,res,next)=>{
+        console.log(req.headers.username);
+        if(req.headers.username){
+
+        user.find( { $and: [ { username: req.headers.username }, { deleted:false } ] } ,(err,data)=>{
+            if(err) return next(new Error('error finding user'))
+            
+            if(data){
+                req.cdata = {
+                    success:1,
+                    message: 'specific user data retrieved',
+                    data:data
+                }
+            next();
+
+            }
+        })
     }
+    },
+    getUserById:(req,res,next)=>{
+        console.log(req.params.id);
+        if(req.params.id){
+
+        user.find( { $and: [ { _id: req.params.id }, { deleted:false } ] } ,(err,data)=>{
+            if(err) return next(new Error('error finding user'))
+            
+            if(data){
+                req.cdata = {
+                    success:1,
+                    message: 'specific user data retrieved',
+                    data:data
+                }
+            next();
+
+            }
+        })
+    }
+    },
 
 }

@@ -13,6 +13,10 @@ router.post('/add',user.collectForUsers,user.create,mw.respond,mw.error);
 //router.post('/add',user.create);
 router.get('/get',user.get,mw.respond,mw.error);
 router.post('/update',user.update,mw.respond,mw.error);
+router.delete('/delete',user.delete,mw.respond,mw.error);
+router.get('/getUndeleted',user.getUndeleted,mw.respond,mw.error);
+router.get('/getUserByName',user.getUserByName,mw.respond,mw.error);
+router.get('/:id',user.getUserById,mw.respond,mw.error);
 
 module.exports = router
 
